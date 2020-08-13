@@ -44,6 +44,7 @@ export class Sudoku {
       })
       this.string = newStr;
       this.textArea.value = newStr;
+      this.updateGridObject(this.string);
     }
   }
 
@@ -93,7 +94,7 @@ export class Sudoku {
         index++;
       }
     }
-    debugger
+    return this.gridObject;
   }
 
   addListeners = () => {

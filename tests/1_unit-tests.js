@@ -29,7 +29,7 @@ suite('UnitTests', () => {
   suite('Function ____()', () => {
     test('Valid "1-9" characters', (done) => {
       const input = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-      let solver = new Solver.Solver()
+      let solver = new Solver.Sudoku()
       let temp = [];
       input.forEach(el => {
         temp.push(solver.testValidInput(el))
@@ -42,7 +42,7 @@ suite('UnitTests', () => {
     // as valid input for the puzzle grid
     test('Invalid characters (anything other than "1-9") are not accepted', (done) => {
       const input = ['!', 'a', '/', '+', '-', '0', '10', 0];
-      let solver = new Solver.Solver()
+      let solver = new Solver.Sudoku()
       let temp = [];
       input.forEach(el => {
         temp.push(solver.testValidInput(el))
@@ -52,25 +52,30 @@ suite('UnitTests', () => {
     });
   });
   
-  // suite('Function ____()', () => {
-  //   test('Parses a valid puzzle string into an object', done => {
-  //     const input = '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..';
-      
-  //     done();
-  //   });
+  suite('Function ____()', () => {
+    test('Parses a valid puzzle string into an object', done => {
+      const input = '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..';
+      let solver = new Solver.Sudoku()
+      let gridObject = solver.updateGridObject(input);
+      assert.isObject(gridObject);
+      done();
+    });
     
-  //   // Puzzles that are not 81 numbers/periods long show the message 
-  //   // "Error: Expected puzzle to be 81 characters long." in the
-  //   // `div` with the id "error-msg"
-  //   test('Shows an error for puzzles that are not 81 numbers long', done => {
-  //     const shortStr = '83.9.....6.62.71...9......1945....4.37.4.3..6..';
-  //     const longStr = '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6...';
-  //     const errorMsg = 'Error: Expected puzzle to be 81 characters long.';
-  //     const errorDiv = document.getElementById('error-msg');
-      
-  //     done();
-  //   });
-  // });
+    // Puzzles that are not 81 numbers/periods long show the message 
+    // "Error: Expected puzzle to be 81 characters long." in the
+    // `div` with the id "error-msg"
+    test('Shows an error for puzzles that are not 81 numbers long', done => {
+      const shortStr = '83.9.....6.62.71...9......1945....4.37.4.3..6..';
+      const longStr = '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6...';
+      const errorMsg = 'Error: Expected puzzle to be 81 characters long.';
+      const errorDiv = document.getElementById('error-msg');
+      let solver = new Solver.Sudoku();
+      solver.paintBoard(shortStr);
+      solver.paintBoard(longStr);
+      assert.equal(errorDiv.innerText, errorMsg);
+      done();
+    });
+  });
 
   // suite('Function ____()', () => {
   //   // Valid complete puzzles pass
