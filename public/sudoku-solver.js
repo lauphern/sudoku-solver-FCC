@@ -42,13 +42,18 @@ class Sudoku {
     }
   }
 
+  clear = () => {
+    this.textArea.value = "";
+    this.inputArray.forEach(input => input.value = "")
+    document.querySelector("#error-msg").innerText = "";
+  }
+
   addListeners = () => {
     //On the document, when the DOM is loaded
     document.addEventListener("DOMContentLoaded", () => {
       // Load a simple puzzle into the text area
-      textArea.value =
-        
-      sudoku.paintBoard(textArea.value);
+      this.textArea.value = this.string;
+      sudoku.paintBoard(this.textArea.value);
     });
     //On the text area
     this.textArea.addEventListener("input", function () {
@@ -61,18 +66,15 @@ class Sudoku {
         this.updateTextArea(e.target);
       })
     })
+
+    //Clear button
+    document.querySelector("#clear-button").addEventListener("click", () => {
+      this.clear()
+    })
   }
 }
 
 const sudoku = new Sudoku();
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Load a simple puzzle into the text area
-  sudoku.textArea.value = sudoku.string;
-  sudoku.paintBoard(sudoku.textArea.value);
-});
-
-
 
 /* 
   Export your functions for testing in Node.
