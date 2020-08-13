@@ -4,7 +4,9 @@ import { puzzlesAndSolutions } from "./puzzle-strings.js";
 class Sudoku {
   constructor() {
     this.inputArray = document.querySelectorAll("table.grid input");
+    this.addListeners()
   }
+
   paintBoard = str => {
     if (this.inputArray.length !== str.length) {
       document.querySelector("#error-msg").innerText =
@@ -21,6 +23,29 @@ class Sudoku {
       }
     }
   };
+
+  updateTextArea = inputField => {
+    if(!/([1-9]|\.|^$)+/gm.test(inputField.value)) {
+      document.querySelector("#error-msg").innerText = "Please enter only numbers in the range of 1-9 and dots (.)";
+      return
+    } else {
+      document.querySelector("#error-msg").innerText = "";
+    }
+  }
+
+  addListeners = () => {
+    //On the text area
+    textArea.addEventListener("input", function () {
+      sudoku.paintBoard(this.value);
+    });
+
+    //On the input fields from the board
+    this.inputArray.forEach(input => {
+      input.addEventListener("input", e => {
+        this.updateTextArea(e.target);
+      })
+    })
+  }
 }
 
 const sudoku = new Sudoku();
@@ -32,10 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
   sudoku.paintBoard(textArea.value);
 });
 
-textArea.addEventListener("input", function () {
-  console.log("changing");
-  sudoku.paintBoard(this.value);
-});
+
 
 /* 
   Export your functions for testing in Node.
