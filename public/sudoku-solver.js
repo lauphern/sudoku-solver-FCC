@@ -61,6 +61,7 @@ export class Sudoku {
     this.paintBoard(this.solution);
     //Update text area
     this.updateTextArea();
+    return this.solution;
   }
 
   checkSolution = () => {
