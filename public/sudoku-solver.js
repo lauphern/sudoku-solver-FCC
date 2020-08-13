@@ -4,6 +4,7 @@ class Sudoku {
   constructor() {
     this.inputArray = document.querySelectorAll("table.grid input");
     this.textArea = document.getElementById("text-input");
+    this.string = "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..";
     this.addListeners()
   }
 
@@ -12,6 +13,7 @@ class Sudoku {
       document.querySelector("#error-msg").innerText =
         "Error: Expected puzzle to be 81 characters long.";
     } else {
+      this.string = str;
       document.querySelector("#error-msg").innerText = "";
       for (let i = 0; i < str.length; i++) {
         if (!/([1-9]|\.)+/gm.test(str[i])) {
@@ -35,11 +37,19 @@ class Sudoku {
         if(input.value === "") newStr += "."
         else newStr += input.value
       })
+      this.string = newStr;
       this.textArea.value = newStr;
     }
   }
 
   addListeners = () => {
+    //On the document, when the DOM is loaded
+    document.addEventListener("DOMContentLoaded", () => {
+      // Load a simple puzzle into the text area
+      textArea.value =
+        
+      sudoku.paintBoard(textArea.value);
+    });
     //On the text area
     this.textArea.addEventListener("input", function () {
       sudoku.paintBoard(this.value);
@@ -58,8 +68,7 @@ const sudoku = new Sudoku();
 
 document.addEventListener("DOMContentLoaded", () => {
   // Load a simple puzzle into the text area
-  sudoku.textArea.value =
-    "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..";
+  sudoku.textArea.value = sudoku.string;
   sudoku.paintBoard(sudoku.textArea.value);
 });
 
