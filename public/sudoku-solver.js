@@ -2,12 +2,14 @@ import { puzzlesAndSolutions } from "./puzzle-strings.js";
 
 class Sudoku {
   constructor() {
+    this.gridObject = {};
     this.inputArray = document.querySelectorAll("table.grid input");
     this.textArea = document.getElementById("text-input");
     this.index = Math.floor(Math.random() * puzzlesAndSolutions.length);
     this.string = puzzlesAndSolutions[this.index][0];
     this.solution = puzzlesAndSolutions[this.index][1];
     this.addListeners()
+    this.gridObjectInit()
   }
 
   paintBoard = str => {
@@ -66,6 +68,20 @@ class Sudoku {
   testValidInput = value => {
     if(value.length > 1) return false;
     else return /([1-9]|\.|^$)+/gm.test(value);
+  }
+
+  gridObjectInit = () => {
+    // A = String.fromCharCode(65)
+    let newRow = {};
+    for(let charCode = 65; charCode <= 74; charCode++) {
+      for(let i = 1; i <= 9; i++) {
+        newRow[`${String.fromCharCode(charCode)}${i}`] = "";
+        if(i === 9) {
+          this.gridObject[String.fromCharCode(charCode)] = newRow;
+          newRow = {};
+        }
+      }
+    }
   }
 
   addListeners = () => {
