@@ -4,7 +4,9 @@ class Sudoku {
   constructor() {
     this.inputArray = document.querySelectorAll("table.grid input");
     this.textArea = document.getElementById("text-input");
-    this.string = "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..";
+    this.index = Math.floor(Math.random() * puzzlesAndSolutions.length);
+    this.string = puzzlesAndSolutions[this.index][0];
+    this.solution = puzzlesAndSolutions[this.index][1];
     this.addListeners()
   }
 
@@ -27,7 +29,7 @@ class Sudoku {
   };
 
   updateTextArea = inputField => {
-    if(!/([1-9]|\.|^$)+/gm.test(inputField.value)) {
+    if(inputField && !/([1-9]|\.|^$)+/gm.test(inputField.value)) {
       document.querySelector("#error-msg").innerText = "Please enter only numbers in the range of 1-9 and dots (.)";
       return
     } else {
@@ -46,6 +48,19 @@ class Sudoku {
     this.textArea.value = "";
     this.inputArray.forEach(input => input.value = "")
     document.querySelector("#error-msg").innerText = "";
+    this.string = "";
+    this.solution = "";
+  }
+
+  clickSolve = () => {
+    //Update grid
+    this.paintBoard(this.solution);
+    //Update text area
+    this.updateTextArea();
+  }
+
+  checkSolution = () => {
+    if(this.solution === this.string) alert("Congrats! You solved the sudoku!")
   }
 
   addListeners = () => {
@@ -53,23 +68,31 @@ class Sudoku {
     document.addEventListener("DOMContentLoaded", () => {
       // Load a simple puzzle into the text area
       this.textArea.value = this.string;
-      sudoku.paintBoard(this.textArea.value);
+      this.paintBoard(this.textArea.value);
     });
+
     //On the text area
-    this.textArea.addEventListener("input", function () {
-      sudoku.paintBoard(this.value);
+    this.textArea.addEventListener("input", e => {
+      this.paintBoard(e.target.value);
+      this.checkSolution();
     });
 
     //On the input fields from the board
     this.inputArray.forEach(input => {
       input.addEventListener("input", e => {
         this.updateTextArea(e.target);
+        this.checkSolution();
       })
     })
 
     //Clear button
     document.querySelector("#clear-button").addEventListener("click", () => {
       this.clear()
+    })
+
+    //Solve button
+    document.querySelector("#solve-button").addEventListener("click", () => {
+      this.clickSolve()
     })
   }
 }
