@@ -77,21 +77,25 @@ suite('UnitTests', () => {
     });
   });
 
-  // suite('Function ____()', () => {
-  //   // Valid complete puzzles pass
-  //   test('Valid puzzles pass', done => {
-  //     const input = '769235418851496372432178956174569283395842761628713549283657194516924837947381625';
+  suite('Function ____()', () => {
+    // Valid complete puzzles pass
+    test('Valid puzzles pass', done => {
+      const input = '769235418851496372432178956174569283395842761628713549283657194516924837947381625';
+      let solver = new Solver.Sudoku();
+      let result = solver.validateSolutionString(input);
+      assert.equal(result, true);
+      done();
+    });
 
-  //     // done();
-  //   });
-
-  //   // Invalid complete puzzles fail
-  //   test('Invalid puzzles fail', done => {
-  //     const input = '779235418851496372432178956174569283395842761628713549283657194516924837947381625';
-
-  //     // done();
-  //   });
-  // });
+    // Invalid complete puzzles fail
+    test('Invalid puzzles fail', done => {
+      const input = '779235418851496372432178956174569283395842761628713549283657194516924837947381625';
+      let solver = new Solver.Sudoku();
+      let result = solver.validateSolutionString(input);
+      assert.equal(result, false);
+      done();
+    });
+  });
   
   
   // suite('Function ____()', () => {
