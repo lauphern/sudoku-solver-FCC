@@ -2,22 +2,24 @@ import { puzzlesAndSolutions } from "./puzzle-strings.js";
 
 export class Sudoku {
   constructor() {
-    this.gridObject = {};
+    this.gridObject = this.gridObjectInit();
     this.inputArray = document.querySelectorAll("table.grid input");
     this.textArea = document.getElementById("text-input");
     this.index = Math.floor(Math.random() * puzzlesAndSolutions.length);
     this.string = puzzlesAndSolutions[this.index][0];
     this.solution = puzzlesAndSolutions[this.index][1];
     this.addListeners()
-    this.gridObjectInit()
   }
 
   paintBoard = str => {
     if (this.inputArray.length !== str.length) {
       document.querySelector("#error-msg").innerText =
         "Error: Expected puzzle to be 81 characters long.";
+      this.string = str;
     } else {
       document.querySelector("#error-msg").innerText = "";
+      this.string = str;
+      this.gridObject = this.updateGridObject(this.string);
       for (let i = 0; i < str.length; i++) {
         if (!this.testValidInput(str[i])) {
           document.querySelector("#error-msg").innerText =
@@ -26,8 +28,6 @@ export class Sudoku {
         }
         this.inputArray[i].value = str[i] === "." ? "" : str[i];
       }
-      this.string = str;
-      this.updateGridObject(this.string);
     }
   };
 
@@ -44,7 +44,7 @@ export class Sudoku {
       })
       this.string = newStr;
       this.textArea.value = newStr;
-      this.updateGridObject(this.string);
+      this.gridObject = this.updateGridObject(this.string);
     }
   }
 
@@ -64,6 +64,9 @@ export class Sudoku {
   }
 
   checkSolution = () => {
+    //If the string only contains numbers (i.e. is completed), check if it's valid
+    if(this.string.length !== 81) return;
+    if(/^[1-9]+$/gm.test(this.string) && !this.validateSolutionString(this.string)) alert("There are some mistakes!")
     if(this.solution === this.string) alert("Congrats! You solved the sudoku!")
   }
 
@@ -75,26 +78,55 @@ export class Sudoku {
   gridObjectInit = () => {
     // A = String.fromCharCode(65)
     let newRow = {};
+    let gridObject = {};
     for(let charCode = 65; charCode <= 73; charCode++) {
       for(let i = 1; i <= 9; i++) {
         newRow[`${String.fromCharCode(charCode)}${i}`] = "";
         if(i === 9) {
-          this.gridObject[String.fromCharCode(charCode)] = newRow;
+          gridObject[String.fromCharCode(charCode)] = newRow;
           newRow = {};
         }
       }
     }
+    return gridObject;
   }
 
-  updateGridObject = (str) => {
+  updateGridObject = str => {
     let index = 0;
-    for(let row in this.gridObject) {
-      for(let cell in this.gridObject[row]) {
-        this.gridObject[row][cell] = str[index];
+    let gridObject = this.gridObjectInit();
+    for(let row in gridObject) {
+      for(let cell in gridObject[row]) {
+        gridObject[row][cell] = str[index];
         index++;
       }
     }
-    return this.gridObject;
+    return gridObject;
+  }
+
+  validateSolutionString = str => {
+    let gridObject = this.updateGridObject(str);
+    let rowCount = {};
+    for(let charCode = 65; charCode <= 73; charCode ++) {
+      let newRow = {};
+      for(let i = 1; i <= 9; i ++) {
+        newRow[i] = 0;
+      }
+      rowCount[String.fromCharCode(charCode)] = newRow;
+    }
+    for(let row in gridObject) {
+      for(let cell in gridObject[row]) {
+        let val = gridObject[row][cell];
+        rowCount[row][val]++; 
+      }
+    }
+    let valuesArray = [];
+    for(let row in rowCount) {
+      for(let cell in rowCount[row]) {
+        let val = rowCount[row][cell];
+        valuesArray.push(val);
+      }
+    }
+    return valuesArray.every(val => val === 1);
   }
 
   addListeners = () => {
