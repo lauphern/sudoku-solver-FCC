@@ -1,6 +1,6 @@
 import { puzzlesAndSolutions } from "./puzzle-strings.js";
 
-class Sudoku {
+export class Sudoku {
   constructor() {
     this.gridObject = {};
     this.inputArray = document.querySelectorAll("table.grid input");
@@ -17,16 +17,17 @@ class Sudoku {
       document.querySelector("#error-msg").innerText =
         "Error: Expected puzzle to be 81 characters long.";
     } else {
-      this.string = str;
       document.querySelector("#error-msg").innerText = "";
       for (let i = 0; i < str.length; i++) {
         if (!this.testValidInput(str[i])) {
           document.querySelector("#error-msg").innerText =
             "Please enter only numbers in the range of 1-9 and dots (.)";
-          break;
+          return;
         }
         this.inputArray[i].value = str[i] === "." ? "" : str[i];
       }
+      this.string = str;
+      this.updateGridObject(this.string);
     }
   };
 
@@ -73,7 +74,7 @@ class Sudoku {
   gridObjectInit = () => {
     // A = String.fromCharCode(65)
     let newRow = {};
-    for(let charCode = 65; charCode <= 74; charCode++) {
+    for(let charCode = 65; charCode <= 73; charCode++) {
       for(let i = 1; i <= 9; i++) {
         newRow[`${String.fromCharCode(charCode)}${i}`] = "";
         if(i === 9) {
@@ -82,6 +83,17 @@ class Sudoku {
         }
       }
     }
+  }
+
+  updateGridObject = (str) => {
+    let index = 0;
+    for(let row in this.gridObject) {
+      for(let cell in this.gridObject[row]) {
+        this.gridObject[row][cell] = str[index];
+        index++;
+      }
+    }
+    debugger
   }
 
   addListeners = () => {
@@ -125,10 +137,11 @@ const sudoku = new Sudoku();
   Note: The `try` block is to prevent errors on
   the client side
 */
-try {
-  module.exports = {
-    Solver: Sudoku,
-  };
-} catch (e) {
-  console.error(e);
-}
+// try {
+//   // module.exports = {
+//   //   Solver: Sudoku,
+//   // };
+//   export default Sudoku;
+// } catch (e) {
+//   console.error(e);
+// }
