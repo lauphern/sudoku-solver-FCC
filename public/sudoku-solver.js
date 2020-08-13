@@ -1,24 +1,32 @@
 const textArea = document.getElementById('text-input');
 import { puzzlesAndSolutions } from './puzzle-strings.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Load a simple puzzle into the text area
-  textArea.value = '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..';
-  let sudoku = new Sudoku();
-  sudoku.paintBoard(textArea.value)
-});
-
 class Sudoku {
   constructor() {
-    this.inputArray = document.querySelectorAll("table.grid input")
+    this.inputArray = document.querySelectorAll("table.grid input");
   }
   paintBoard = (str) => {
-    if(this.inputArray.length !== str.length) alert("Please enter a string in the text area that covers every cells of the Sudoku grid")
-    for(let i = 0; i < str.length; i++) {
-      this.inputArray[i].value = str[i] === "." ? "" : str[i];
+    if(this.inputArray.length !== str.length) {
+      document.querySelector("#error-msg").innerText = "Error: Expected puzzle to be 81 characters long.";
+    } else {
+      document.querySelector("#error-msg").innerText = "";
+      for(let i = 0; i < str.length; i++) {
+        this.inputArray[i].value = str[i] === "." ? "" : str[i];
+      }
     }
   }
 }
+
+
+const sudoku = new Sudoku()
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Load a simple puzzle into the text area
+  textArea.value = '..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..';
+  sudoku.paintBoard(textArea.value)
+});
+
+textArea.addEventListener("input", function() {console.log("changing");sudoku.paintBoard(this.value)});
 
 /* 
   Export your functions for testing in Node.
