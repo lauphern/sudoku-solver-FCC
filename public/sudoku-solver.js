@@ -18,7 +18,7 @@ class Sudoku {
       this.string = str;
       document.querySelector("#error-msg").innerText = "";
       for (let i = 0; i < str.length; i++) {
-        if (!/([1-9]|\.)+/gm.test(str[i])) {
+        if (!this.testValidInput(str[i])) {
           document.querySelector("#error-msg").innerText =
             "Please enter only numbers in the range of 1-9 and dots (.)";
           break;
@@ -28,8 +28,8 @@ class Sudoku {
     }
   };
 
-  updateTextArea = inputField => {
-    if(inputField && !/([1-9]|\.|^$)+/gm.test(inputField.value)) {
+  updateTextArea = inputFieldValue => {
+    if(inputFieldValue && !this.testValidInput(inputFieldValue)) {
       document.querySelector("#error-msg").innerText = "Please enter only numbers in the range of 1-9 and dots (.)";
       return
     } else {
@@ -63,6 +63,11 @@ class Sudoku {
     if(this.solution === this.string) alert("Congrats! You solved the sudoku!")
   }
 
+  testValidInput = value => {
+    if(value.length > 1) return false;
+    else return /([1-9]|\.|^$)+/gm.test(value);
+  }
+
   addListeners = () => {
     //On the document, when the DOM is loaded
     document.addEventListener("DOMContentLoaded", () => {
@@ -80,7 +85,7 @@ class Sudoku {
     //On the input fields from the board
     this.inputArray.forEach(input => {
       input.addEventListener("input", e => {
-        this.updateTextArea(e.target);
+        this.updateTextArea(e.target.value);
         this.checkSolution();
       })
     })
@@ -106,6 +111,8 @@ const sudoku = new Sudoku();
 */
 try {
   module.exports = {
-    Sudoku,
+    Solver: Sudoku,
   };
-} catch (e) {}
+} catch (e) {
+  console.error(e);
+}
