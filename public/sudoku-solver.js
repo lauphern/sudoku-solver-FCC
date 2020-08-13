@@ -1,9 +1,9 @@
-const textArea = document.getElementById("text-input");
 import { puzzlesAndSolutions } from "./puzzle-strings.js";
 
 class Sudoku {
   constructor() {
     this.inputArray = document.querySelectorAll("table.grid input");
+    this.textArea = document.getElementById("text-input");
     this.addListeners()
   }
 
@@ -30,12 +30,18 @@ class Sudoku {
       return
     } else {
       document.querySelector("#error-msg").innerText = "";
+      let newStr = "";
+      this.inputArray.forEach(input => {
+        if(input.value === "") newStr += "."
+        else newStr += input.value
+      })
+      this.textArea.value = newStr;
     }
   }
 
   addListeners = () => {
     //On the text area
-    textArea.addEventListener("input", function () {
+    this.textArea.addEventListener("input", function () {
       sudoku.paintBoard(this.value);
     });
 
@@ -52,9 +58,9 @@ const sudoku = new Sudoku();
 
 document.addEventListener("DOMContentLoaded", () => {
   // Load a simple puzzle into the text area
-  textArea.value =
+  sudoku.textArea.value =
     "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..";
-  sudoku.paintBoard(textArea.value);
+  sudoku.paintBoard(sudoku.textArea.value);
 });
 
 
