@@ -45,20 +45,30 @@ suite('Functional Tests', () => {
     });
   });
   
-  // suite('Clear and solve buttons', () => {
-  //   // Pressing the "Clear" button clears the sudoku 
-  //   // grid and the text area
-  //   test('Function clearInput()', done => {
-
-  //     // done();
-  //   });
+  suite('Clear and solve buttons', () => {
+    // Pressing the "Clear" button clears the sudoku 
+    // grid and the text area
+    test('Function clearInput()', done => {
+      let solver = new Solver.Sudoku();
+      solver.clear()
+      assert.equal(document.querySelector("textarea").value, "");
+      assert.equal(document.querySelector("input#A1").value, "");
+      assert.equal(document.querySelector("input#C7").value, "");
+      assert.equal(document.querySelector("input#I9").value, "");
+      done();
+    });
     
-  //   // Pressing the "Solve" button solves the puzzle and
-  //   // fills in the grid with the solution
-  //   test('Function showSolution(solve(input))', done => {
-
-  //     // done();
-  //   });
-  // });
+    // Pressing the "Solve" button solves the puzzle and
+    // fills in the grid with the solution
+    test('Function showSolution(solve(input))', done => {
+      let solver = new Solver.Sudoku();
+      solver.clickSolve()
+      assert.equal(document.querySelector("textarea").value, solver.solution);
+      assert.equal(document.querySelector("input#A1").value, solver.solution[0]);
+      assert.equal(document.querySelector("input#C7").value, solver.solution[24]);
+      assert.equal(document.querySelector("input#I9").value, solver.solution[80]);
+      done();
+    });
+  });
 });
 
