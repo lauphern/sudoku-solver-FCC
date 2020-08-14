@@ -19,21 +19,31 @@ suite('Functional Tests', () => {
     Solver = require('../public/sudoku-solver.js');
   });
   
-  // suite('Text area and sudoku grid update automatically', () => {
-  //   // Entering a valid number in the text area populates 
-  //   // the correct cell in the sudoku grid with that number
-  //   test('Valid number in text area populates correct cell in grid', done => {
+  suite('Text area and sudoku grid update automatically', () => {
+    // Entering a valid number in the text area populates 
+    // the correct cell in the sudoku grid with that number
+    test('Valid number in text area populates correct cell in grid', done => {
+      let input = "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.";
+      let solver = new Solver.Sudoku();
+      solver.paintBoard(input);
+      let newInput = "3" + input.slice(1);
+      solver.paintBoard(newInput);
+      assert.equal(document.querySelector("input#A1").value, newInput[0]);
+      done();
+    });
 
-  //     // done();
-  //   });
-
-  //   // Entering a valid number in the grid automatically updates
-  //   // the puzzle string in the text area
-  //   test('Valid number in grid updates the puzzle string in the text area', done => {
-
-  //     // done();
-  //   });
-  // });
+    // Entering a valid number in the grid automatically updates
+    // the puzzle string in the text area
+    test('Valid number in grid updates the puzzle string in the text area', done => {
+      let input = "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.";
+      let solver = new Solver.Sudoku();
+      solver.updateTextArea(input);
+      let newInput = "3" + input.slice(1);
+      solver.updateTextArea(newInput[0]);
+      assert.equal(document.querySelector("textarea").value, newInput);
+      done();
+    });
+  });
   
   // suite('Clear and solve buttons', () => {
   //   // Pressing the "Clear" button clears the sudoku 
